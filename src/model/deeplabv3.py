@@ -15,6 +15,7 @@ class TrashSegmentation(pl.LightningModule):
         self,
         pretrained: Union[bool, str, Path] = True,
         n_classes: int = 2,
+        freez: bool = True,
     ):
         super().__init__()
         self.model = torchvision.models.segmentation.deeplabv3_mobilenet_v3_large(
@@ -26,6 +27,9 @@ class TrashSegmentation(pl.LightningModule):
             kernel_size=(1, 1),
             stride=(1, 1),
         )
+        if freez:
+            for p in self.model.backbone.parameters():
+                p.requires_grad = False
         # if pretrained:
         #     self.model.aux_classifier[4] = nn.Conv2d(
         #         10,
