@@ -55,6 +55,8 @@ class TrashSegmentation(pl.LightningModule):
         # out = nn.Sigmoid()(out["out"]).squeeze(1)
         loss = nn.CrossEntropyLoss()(out.float(), mask.float())
 
+        out_mask = out.argmax(dim=1)
+
         # out_result = (out > 0.5).bool()
         # iou = (out_result & mask.bool()).sum(dim=(1, 2)) / (
         #     (out_result | mask.bool()).sum(dim=(1, 2)) + 1e-8
@@ -87,7 +89,7 @@ class TrashSegmentation(pl.LightningModule):
                 "val/img1",
                 draw_segmentation_masks(
                     (img[0] * 255).type(torch.ByteTensor),
-                    out[0][1:].bool(),
+                    out_mask[0] > 0,
                     alpha=0.8,
                 ),
                 self.current_epoch,
@@ -96,7 +98,7 @@ class TrashSegmentation(pl.LightningModule):
                 "val/img2",
                 draw_segmentation_masks(
                     (img[1] * 255).type(torch.ByteTensor),
-                    out[1][1:].bool(),
+                    out_mask[1] > 0,
                     alpha=0.8,
                 ),
                 self.current_epoch,
