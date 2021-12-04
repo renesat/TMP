@@ -11,6 +11,9 @@ in pkgs.mkShell {
     python39
     python39Packages.pip
     python39Packages.setuptools
+    python3Packages.tensorflow-tensorboard
+    python3Packages.tensorboardx
+    python3Packages.tensorboard-data-server
 
     python39Packages.venvShellHook
   ];
