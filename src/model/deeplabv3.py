@@ -54,21 +54,19 @@ class TrashSegmentation(pl.LightningModule):
 
         with torch.no_grad():
             if batch_idx == 0:
-                img = (
-                    img
-                    * torch.Tensor([0.229, 0.224, 0.225])
-                    .to(img.device)
-                    .resize(1, 3, 1, 1)
-                    + torch.Tensor(
-                        [
-                            0.485,
-                            0.456,
-                            0.406,
-                        ]
-                    )
-                    .to(img.device)
-                    .resize(1, 3, 1, 1)
+                mean = torch.Tensor([0.229, 0.224, 0.225], device=img.device).resize(
+                    1, 3, 1, 1
                 )
+                var = torch.Tensor(
+                    [
+                        0.485,
+                        0.456,
+                        0.406,
+                    ],
+                    device=img.device,
+                ).resize(1, 3, 1, 1)
+
+                img = img * var + mean
                 img[img > 1] = 1
                 img[img < 0] = 0
                 self.logger.experiment.add_image(
@@ -113,19 +111,19 @@ class TrashSegmentation(pl.LightningModule):
         self.log("val/loss", loss)
 
         if batch_idx == 0:
-            img = (
-                img
-                * torch.Tensor([0.229, 0.224, 0.225]).to(img.device).resize(1, 3, 1, 1)
-                + torch.Tensor(
-                    [
-                        0.485,
-                        0.456,
-                        0.406,
-                    ]
-                )
-                .to(img.device)
-                .resize(1, 3, 1, 1)
+            mean = torch.Tensor([0.229, 0.224, 0.225], device=img.device).resize(
+                1, 3, 1, 1
             )
+            var = torch.Tensor(
+                [
+                    0.485,
+                    0.456,
+                    0.406,
+                ],
+                device=img.device,
+            ).resize(1, 3, 1, 1)
+
+            img = img * var + mean
             img[img > 1] = 1
             img[img < 0] = 0
             self.logger.experiment.add_image(
