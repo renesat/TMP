@@ -103,5 +103,5 @@ class OurDataset(Dataset):
 
         return {
             "image": image,
-            "mask": mask,
+            "mask": mask,  # .argmax(dim=1),
         }
