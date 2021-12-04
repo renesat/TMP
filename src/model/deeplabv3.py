@@ -46,7 +46,7 @@ class TrashSegmentation(pl.LightningModule):
         mask = batch["mask"]
         out = self.forward(img)
         # out = nn.Sigmoid()(out["out"]).squeeze(1)
-        loss = nn.CrossEntropyLoss()(out.float(), mask.float())
+        loss = nn.CrossEntropyLoss()(out.float(), mask.argmax(dim=1))
 
         self.log("train/loss", loss)
 
@@ -96,10 +96,9 @@ class TrashSegmentation(pl.LightningModule):
         img = batch["image"]
         mask = batch["mask"]
         out = self.forward(img)
-        # out = nn.Sigmoid()(out["out"]).squeeze(1)
-        loss = nn.CrossEntropyLoss()(out.float(), mask.float())
-
         out_mask = out.argmax(dim=1)
+        # out = nn.Sigmoid()(out["out"]).squeeze(1)
+        loss = nn.CrossEntropyLoss()(out.float(), mask.argmax(dim=1))
 
         # out_result = (out > 0.5).bool()
         # iou = (out_result & mask.bool()).sum(dim=(1, 2)) / (
