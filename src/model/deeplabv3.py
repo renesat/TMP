@@ -111,6 +111,10 @@ class TrashSegmentation(pl.LightningModule):
         }
 
     def validation_epoch_end(self, epoches_output):
+        print(
+            "val/loss",
+            np.mean([x["loss"].detach().cpu().item() for x in epoches_output]),
+        )
         # mIoU = []
         # mDSC = []
         # for item in epoches_output:
