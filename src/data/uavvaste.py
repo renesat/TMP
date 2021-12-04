@@ -105,7 +105,8 @@ class UAVVaste(Dataset):
         return len(self.ids)
 
     def view_item(self, idx):
-        img, mask = self[idx]
+        img = self[idx]["image"]
+        mask = self[idx]["mask"]
         img = (
             img * torch.Tensor([0.229, 0.224, 0.225]).to(img.device).resize(3, 1, 1)
             + torch.Tensor(
