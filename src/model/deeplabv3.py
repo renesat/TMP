@@ -67,7 +67,7 @@ class TrashSegmentation(pl.LightningModule):
                     "train/img1",
                     draw_segmentation_masks(
                         (img[0] * 255).type(torch.ByteTensor),
-                        out_mask[0] > 0,
+                        out[0][1:].bool(),
                         alpha=0.8,
                     ),
                     self.current_epoch,
@@ -76,7 +76,7 @@ class TrashSegmentation(pl.LightningModule):
                     "train/img2",
                     draw_segmentation_masks(
                         (img[1] * 255).type(torch.ByteTensor),
-                        out_mask[1] > 0,
+                        out[1][1:].bool(),
                         alpha=0.8,
                     ),
                     self.current_epoch,
@@ -117,7 +117,7 @@ class TrashSegmentation(pl.LightningModule):
                 "val/img1",
                 draw_segmentation_masks(
                     (img[0] * 255).type(torch.ByteTensor),
-                    out_mask[0] > 0,
+                    out[0][1:].bool(),
                     alpha=0.8,
                 ),
                 self.current_epoch,
@@ -126,7 +126,7 @@ class TrashSegmentation(pl.LightningModule):
                 "val/img2",
                 draw_segmentation_masks(
                     (img[1] * 255).type(torch.ByteTensor),
-                    out_mask[1] > 0,
+                    out[1][1:].bool(),
                     alpha=0.8,
                 ),
                 self.current_epoch,
